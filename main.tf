@@ -23,8 +23,8 @@ module "eks" {
       instance_types = ["t2.medium"]
 
       min_size     = 1
-      max_size     = 2
-      desired_size = 1
+      max_size     = 3
+      desired_size = 2
     }
   }
 
@@ -116,4 +116,9 @@ resource "helm_release" "airbyte" {
   repository = "https://airbytehq.github.io/helm-charts"
   chart      = "airbyte"
   namespace  = "default"
+
+  depends_on = [
+    aws_eks_addon.ebs_csi_driver,
+    module.eks.eks_managed_node_groups,
+  ]
 }
